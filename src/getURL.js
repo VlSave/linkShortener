@@ -1,7 +1,18 @@
 import fs from 'fs';
 
-export default (hash) => {
-	const base = JSON.parse(fs.readFileSync('base.json'));
+export default (hash) => new Promise((resolve, reject) => {
+  fs.readFile('base.json', (err, data) => {
+    if (err) {
+      reject(err);
+    }
 
-	return base[hash];
-};
+    try {
+      const base = JSON.parse(data.toString());
+      console.log(base[hash]);
+      resolve(base[hash]);
+    } catch (e) {
+      console.log(e);
+      reject(e);
+    }
+  });
+});
