@@ -7,7 +7,7 @@
     "link-shortener": "dist/bin/link-shortener.js"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "files": [
     "dist"

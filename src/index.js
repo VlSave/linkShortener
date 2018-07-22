@@ -14,15 +14,15 @@ server.on('request', (request, response) => {
   });
 
   if (request.method === 'GET') {
-    const newLocation = getURL(parsedURL.path.substr(1));
-
-    newLocation
-      .then(
-        res => response.writeHead(301, { Location: res }),
-        e => response.writeHead(500)
-      );
-
-    response.end();
+    getURL(parsedURL.path.substr(1))
+      .then((res) => {
+        response.writeHead(301, { Location: res });
+        response.end();
+      })
+      .catch((e) => {
+        response.writeHead(500);
+        response.end();
+      });
   }
 
   if (request.method === 'POST' && parsedURL.path === '/create-link') {
@@ -44,6 +44,7 @@ server.on('request', (request, response) => {
             },
             (e) => {
               response.writeHead(500);
+              response.end();
             }
           );
       }

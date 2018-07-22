@@ -1,18 +1,13 @@
 import fs from 'fs';
 
-export default (hash) => new Promise((resolve, reject) => {
-  fs.readFile('base.json', (err, data) => {
-    if (err) {
-      reject(err);
-    }
+const fsp = fs.promises;
 
-    try {
-      const base = JSON.parse(data.toString());
-      console.log(base[hash]);
-      resolve(base[hash]);
-    } catch (e) {
-      console.log(e);
-      reject(e);
-    }
+
+export default hash => fsp.readFile('base.json', 'utf-8')
+  .then((data) => {
+    const base = JSON.parse(data);
+    return base[hash];
+  })
+  .catch((err) => {
+    throw err;
   });
-});

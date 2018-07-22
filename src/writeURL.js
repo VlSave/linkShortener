@@ -1,28 +1,22 @@
 import fs from 'fs';
 import md5 from 'md5';
 
-export default (fullURL) => new Promise((resolve, reject) => {
-  fs.readFile('base.json', (err, data) => {
-    if (err) {
-      reject(err);
-    }
+const fsp = fs.promises;
 
-    try {
-      const base = JSON.parse(data.toString());
-      const hostName = 'http://shrt.link/';
-      const hash = md5(fullURL);
+const getBase = () => fsp.readFile('base.json', 'utf-8')
+  .then(data => JSON.parse(data));
 
-      base[hash] = fullURL;
+export default fullURL => getBase()
+  .then((obj) => {
+    const base = obj;
+    const hostName = 'http://shrt.link/';
+    const hash = md5(fullURL);
 
-      fs.writeFile('base.json', JSON.stringify(base), (e) => {
-        if (e) {
-          reject(e);
-        }
-
-        resolve(hostName + hash);
-      });
-    } catch (error) {
-      reject(error);
-    }
+    base[hash] = fullURL;
+    return fsp.writeFile('base.json', JSON.stringify(base))
+      .then(() => hostName + hash)
+      .catch(err => err);
+  })
+  .catch((err) => {
+    throw err;
   });
-});
