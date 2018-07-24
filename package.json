@@ -19,6 +19,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "md5": "^2.2.1"
   },
   "devDependencies": {
