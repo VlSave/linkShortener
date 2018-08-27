@@ -1,8 +1,8 @@
 import http from 'http';
 import url from 'url';
 import querystring from 'querystring';
-import getURL from './getURL';
-import writeURL from './writeURL';
+import getURL from './partials/getURL';
+import writeURL from './partials/writeURL';
 
 const server = http.createServer();
 
@@ -19,7 +19,7 @@ server.on('request', (request, response) => {
         response.writeHead(301, { Location: res });
         response.end();
       })
-      .catch((e) => {
+      .catch(() => {
         response.writeHead(500);
         response.end();
       });

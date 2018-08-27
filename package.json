@@ -12,16 +12,26 @@
   "files": [
     "dist"
   ],
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "stage-2"
+    ]
+  },
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "start": "webpack --config ./webpack.config.js --watch",
+    "build_frontend": "webpack --config ./webpack.config.js",
     "babel-node": "babel-node",
     "eslint": "eslint",
-    "build": "cross-env NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "build_server": "cross-env NODE_ENV=production babel server/src --out-dir server/dist --source-maps inline",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "express": "^4.16.3",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -29,6 +39,7 @@
     "babel-eslint": "^8.2.2",
     "babel-loader": "^7.1.5",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^5.1.5",
     "debug": "^3.1.0",
@@ -36,8 +47,8 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-babel": "^5.0.0",
     "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-react": "^7.11.1",
     "webpack": "^4.16.5",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5"
+    "webpack-cli": "^3.1.0"
   }
 }

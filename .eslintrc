@@ -1,7 +1,23 @@
 {
-  "extends": "./node_modules/eslint-config-airbnb-base/index.js",
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "comma-dangle": 0,
     "linebreak-style": 0
-  }
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": ["airbnb-base"]
 }
