@@ -22,7 +22,7 @@
   "scripts": {
     "start": "webpack --config ./webpack.config.js --watch",
     "build_frontend": "webpack --config ./webpack.config.js",
-    "babel-node": "babel-node",
+    "babel-node": "babel-node server/src/app",
     "eslint": "eslint",
     "build_server": "cross-env NODE_ENV=production babel server/src --out-dir server/dist --source-maps inline",
     "prepublishOnly": "npm run build"
@@ -41,6 +41,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "body-parser": "^1.18.3",
     "cross-env": "^5.1.5",
     "debug": "^3.1.0",
     "eslint": "^4.19.1",
