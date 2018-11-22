@@ -20,16 +20,18 @@
     ]
   },
   "scripts": {
-    "start": "webpack --config ./webpack.config.js --watch",
-    "build_frontend": "webpack --config ./webpack.config.js",
-    "babel-node": "babel-node server/src/app",
-    "eslint": "eslint",
-    "build_server": "cross-env NODE_ENV=production babel server/src --out-dir server/dist --source-maps inline",
-    "prepublishOnly": "npm run build"
+    "webpackWatch": "webpack --config ./webpack.config.js --watch",
+    "webpackBuild": "webpack --config ./webpack.build.js",
+    "start": "babel-node server/app",
+    "lint": "eslint"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "md5": "^2.2.1",
+    "mongodb": "*",
+    "mongoose": "^5.3.11",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },
@@ -49,6 +51,7 @@
     "eslint-plugin-babel": "^5.0.0",
     "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-react": "^7.11.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0"
   }

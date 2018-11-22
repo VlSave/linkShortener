@@ -1,9 +1,10 @@
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
   entry: './client/js/main.js',
-  mode: 'development',
+  mode: 'production',
   output: {
     path: path.resolve(__dirname, 'server/assets/js'),
     publicPath: '/',
@@ -17,6 +18,9 @@ module.exports = {
         use: ['babel-loader']
       }
     ]
+  },
+  optimization: {
+    minimizer: [new UglifyJsPlugin()]
   },
   resolve: {
     extensions: ['*', '.js', '.jsx']
