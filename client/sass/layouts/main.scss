@@ -1,0 +1,22 @@
+html {
+  min-height: 100%;
+  height: 1px;
+}
+
+body {
+  font-family: $font__default;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: none;
+  color: $clr__main;
+
+  position: relative;
+  z-index: 10;
+
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  background: $clr__white;
+  cursor: default;
+}

@@ -14,7 +14,7 @@ import Guest from './partials/entities/Guest';
 
 const app = Express();
 const port = 5000;
-const DBConnection = mongoose.createConnection('mongodb://localhost:27017/base');
+const DBConnection = mongoose.createConnection('mongodb://localhost:27017/base', { useNewUrlParser: true });
 
 const linksScheme = new mongoose.Schema({
   _id: String,
@@ -38,7 +38,7 @@ const Links = DBConnection.model('Link', linksScheme);
 const Users = DBConnection.model('Users', usersScheme);
 
 
-app.use('/assets', Express.static(path.join(__dirname, 'assets')));
+app.use('/assets', Express.static(path.join(__dirname, '/assets')));
 app.get('/favicon.ico', (req, res) => res.status(204))
 
 app.use(bodyParser.urlencoded({ extended: false }));
