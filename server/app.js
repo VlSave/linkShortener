@@ -13,6 +13,11 @@ import Guest from './partials/entities/Guest';
 
 const MongoStore = require('connect-mongo')(session);
 
+let mongodbURI = process.env.MONGODB_URI;
+if (!mongodbURI) {
+  mongodbURI = 'mongodb://localhost:27017/base';
+}
+
 const DBConnection = mongoose.createConnection('mongodb://localhost:27017/base', { useNewUrlParser: true });
 
 const linksScheme = new mongoose.Schema({
@@ -39,7 +44,6 @@ const usersScheme = new mongoose.Schema({
 const Users = DBConnection.model('Users', usersScheme);
 
 const app = Express();
-const port = 5000;
 
 
 app.use('/assets', Express.static(path.join(__dirname, '/assets')));
@@ -192,6 +196,10 @@ app.use((err, req, res, next) => {
   res.send(err);
 });
 
+let port = process.env.PORT;
+if (port == null || port === '') {
+  port = 5000;
+}
 app.listen(port, (err) => {
   if (err) {
     return console.log('something bad happened', err);
