@@ -1,0 +1,3 @@
+@mixin transition () {
+  transition: .6s cubic-bezier(.165, .84, .44, 1);
+}

@@ -1,11 +1,14 @@
 $clr__black: #000;
 $clr__dark: #1a1a1a;
 $clr__green: #42b336;
-$clr__blue: #099cd5;
+$clr__blue: #419ddc;
+$clr__blue-hover: #3b91cb;
 $clr__gray: #71777f;
 $clr__gray_medium: #d6d6d6;
-$clr__red: #fe371c;
+$clr__red: #ed2b3b;;
 $clr__white: #fff;
+$clr__white-hover: #fdfdfd;
 
-$clr__main: $clr__dark;
-$clr__text: $clr__main;
+$clrt__main: $clr__dark;
+$clrt__link: $clr__blue;
+$clrt__err: #ff7d88;

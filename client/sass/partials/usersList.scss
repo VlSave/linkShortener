@@ -1,0 +1,74 @@
+.usersList {
+  width: 100%;
+  max-width: 640px;
+  margin-top: 30px;
+
+  list-style: none;
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+  }
+
+  &__value {
+    display: inline-block;
+    height: 38px;
+    padding: 8px 12px;
+    flex: 2;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    vertical-align: top;
+    border-right: none;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    cursor: text;
+  }
+
+  &__btn-copy {
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    height: 38px;
+    padding: 8px 12px;
+    line-height: 1.4;
+    vertical-align: top;
+
+    font-size: 14px;
+    color: #fff;
+    background-color: #419ddc;
+    border: 1px solid #419ddc;
+    border-radius: 4px;
+    cursor: pointer;
+    border-left: none;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+
+    @include transition();
+
+    &_copied {
+      &:before {
+        content: 'Copied!';
+        display: inline-block;
+        padding: 3px 5px;
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translate(-50%);
+
+        font-size: 12px;
+        color: #fff;
+        border-radius: 2px;
+        background-color: #000;
+      }
+    }
+  }
+}

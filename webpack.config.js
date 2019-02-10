@@ -11,7 +11,7 @@ module.exports = {
   entry: './client/main.js',
   output: {
     path: path.resolve(__dirname, 'server/assets'),
-    publicPath: '/',
+    publicPath: '/assets',
     filename: 'bundle.js'
   },
   module: {
@@ -41,12 +41,11 @@ module.exports = {
           'sass-loader'
         ]
       }, {
-        test: /\.(gif|png|jpe?g|svg)$/i,
-        exclude: '/client',
+        test: /\.(gif|png|jpeg|jpg|svg)$/i,
         use: [{
           loader: 'file-loader',
           options: {
-            name: 'images/[name][hash].[ext]'
+            name: '/images/[name][hash].[ext]'
           }
         }, {
           loader: 'image-webpack-loader',
@@ -63,7 +62,7 @@ module.exports = {
         use: {
           loader: 'file-loader',
           options: {
-            name: 'fonts/[name][hash].[ext]'
+            name: '/fonts/[name][hash].[ext]'
           }
         },
       }

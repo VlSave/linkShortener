@@ -11,16 +11,17 @@ import encrypt from './partials/encrypt';
 import User from './partials/entities/User';
 import Guest from './partials/entities/Guest';
 
+const MongoStore = require('connect-mongo')(session);
 
-const app = Express();
-const port = 5000;
 const DBConnection = mongoose.createConnection('mongodb://localhost:27017/base', { useNewUrlParser: true });
 
 const linksScheme = new mongoose.Schema({
-  _id: String,
+  shortUrl: String,
   fullUrl: String,
   createDate: Date
 });
+const Links = DBConnection.model('Link', linksScheme);
+
 const usersScheme = new mongoose.Schema({
   login: {
     type: String,
@@ -31,15 +32,18 @@ const usersScheme = new mongoose.Schema({
     type: String,
     required: true
   },
+  links: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Link' }],
   createDate: Date
 });
 
-const Links = DBConnection.model('Link', linksScheme);
 const Users = DBConnection.model('Users', usersScheme);
+
+const app = Express();
+const port = 5000;
 
 
 app.use('/assets', Express.static(path.join(__dirname, '/assets')));
-app.get('/favicon.ico', (req, res) => res.status(204))
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -48,19 +52,22 @@ app.use(session({
   secret: 'secret key',
   resave: false,
   saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: DBConnection })
 }));
 
 // authentication
 app.use((req, res, next) => {
-  console.log(req.session, req.session.nickname);
   if (req.session && req.session.nickname) {
     const { nickname } = req.session;
     Users.findOne({ login: nickname }).exec()
       .then((user) => {
         if (user) {
-          res.locals.currentUser = new User(user.login, user.password);
+          res.locals.currentUser = new User(user.login, user.password, user._id);
         }
         next();
+      })
+      .catch((err) => {
+        next(err);
       });
   } else {
     res.locals.currentUser = new Guest();
@@ -68,15 +75,16 @@ app.use((req, res, next) => {
   }
 });
 
-app.get('/', (req, response) => {
-  response.status(200).send(getIndexPage(response.locals.currentUser));
+app.get('/', (req, res) => {
+
+  res.send(getIndexPage());
 });
 
-app.get('/user/:type', (req, response) => {
-  if (req.params.type === 'new' || req.params.type === 'login') {
-    response.status(200).send(getLoginSignUpPage(`/user/${req.params.type}`));
+app.get('/api/init_data', (req, response) => {
+  if (response.locals.currentUser.isGuest()) {
+    response.send({ userNickname: '' });
   } else {
-    response.sendStatus(404);
+    response.send({ userNickname: response.locals.currentUser.getName() });
   }
 });
 
@@ -84,11 +92,14 @@ app.post('/user/new', (req, response, next) => {
   Users.findOne({ login: req.body.nickname }).exec()
     .then((user) => {
       if (user) {
-        response.status(422).send(getLoginSignUpPage('/user/new', 'This nickname is already taken!'));
+        response.send({ success: false, name: 'login', msg: 'This nickname is already taken!' });
       } else {
         Users.create({ login: req.body.nickname, password: encrypt(req.body.password), createDate: new Date() })
           .then((user) => {
-            response.redirect('/');
+            response.send({ success: true });
+          })
+          .catch((err) => {
+            next(err);
           });
       }
     })
@@ -102,9 +113,9 @@ app.post('/user/login', (req, response, next) => {
     .then((user) => {
       if (user && user.password === encrypt(req.body.password)) {
         req.session.nickname = user.login;
-        response.redirect('/');
+        response.send({ success: true });
       } else {
-        response.status(422).send(getLoginSignUpPage('/user/login', 'Invalid nickname or password'));
+        response.send({ success: false, name: 'login', msg: 'Invalid nickname or password' });
       }
     })
     .catch((err) => {
@@ -112,10 +123,31 @@ app.post('/user/login', (req, response, next) => {
     });
 });
 
-app.get('/:hash', (req, response, next) => {
-  Links.findById(req.params.hash, 'fullUrl').exec()
-    .then((link) => {
-      response.redirect(link.fullUrl);
+app.delete('/user/login', (req, response) => {
+  if (req.session) {
+    req.session.destroy();
+  }
+  response.send({ success: true });
+});
+
+app.get('/user/profile', (req, response) => {
+  response.locals.currentUser.isGuest() ? response.redirect('/') : response.send(getIndexPage());
+});
+
+app.get('/api/get_users-links', (req, response, next) => {
+  Users.findOne({ login: response.locals.currentUser.getName() })
+    .exec()
+    .then((user) => {
+      user.populate('links')
+        .execPopulate()
+        .then((item) => {
+          const links = item.links.slice(-10).reduce((acc, curr) => [...acc, {
+            id: curr._id,
+            fullLink: curr.fullUrl,
+            tinyLink: `${req.headers.host}/${curr.shortUrl}`
+          }], []);
+          response.send(links);
+        });
     })
     .catch((err) => {
       next(err);
@@ -125,14 +157,34 @@ app.get('/:hash', (req, response, next) => {
 app.post('/create-link', (req, response, next) => {
   const hostName = req.headers.host;
   const newUrl = req.body.url;
-  const hash = md5(newUrl);
+  const hash = md5(newUrl).substring(0, 6);
 
-  Links.findOneAndUpdate({ _id: hash }, { fullUrl: newUrl, createDate: new Date() }, { upsert: true, setDefaultsOnInsert: true }).exec()
+  Links.findOneAndUpdate({ shortUrl: hash }, { fullUrl: newUrl, createDate: new Date() }, { new: true, upsert: true, setDefaultsOnInsert: true }).exec()
     .then((link) => {
-      response.status(200).send(JSON.stringify(`${hostName}/${hash}`));
+      if (!response.locals.currentUser.isGuest()) {
+        Users.findOneAndUpdate({ _id: response.locals.currentUser.getID() }, { $push: { links: link._id } }).exec()
+          .then((user) => {
+            response.send({ newUrl: `${hostName}/${hash}` });
+          })
+          .catch((err) => {
+            next(err);
+          });
+      } else {
+        response.send({ newUrl: `${hostName}/${hash}` });
+      }
     })
     .catch((err) => {
       next(err);
+    });
+});
+
+app.get('/:hash', (req, response, next) => {
+  Links.findOne({ shortUrl: req.params.hash }).exec()
+    .then((link) => {
+      response.redirect(link.fullUrl);
+    })
+    .catch((err) => {
+      response.status(200).send(getIndexPage());
     });
 });
 

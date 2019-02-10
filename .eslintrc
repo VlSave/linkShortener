@@ -4,7 +4,9 @@
   ],
   "rules": {
     "comma-dangle": 0,
-    "linebreak-style": 0
+    "linebreak-style": 0,
+    "max-len": "off",
+    "no-underscore-dangle": "off"
   },
   "parserOptions": {
     "ecmaVersion": 6,

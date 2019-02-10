@@ -1,0 +1,16 @@
+.profile {
+  display: flex;
+  margin: 0 auto;
+  max-width: 980px;
+  padding: 100px 15px;
+  flex-direction: column;
+  height: calc(100% - 137px);
+  overflow-y: auto;
+}
+
+@media (max-width: $breakpoint_small) {
+  .profile {
+    padding: 40px 15px;
+    height: calc(100% - 126px);
+  }
+}

@@ -8,15 +8,169 @@ body {
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-size-adjust: none;
-  color: $clr__main;
+  color: $clrt__main;
 
   position: relative;
   z-index: 10;
 
   min-height: 100%;
+  height: 1px;
   overflow-x: hidden;
   overflow-y: scroll;
 
   background: $clr__white;
   cursor: default;
+}
+
+#app {
+  min-height: 100%;
+  height: 1px;
+}
+
+.page {
+  min-height: 100%;
+  height: 1px;
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  border-bottom: 2px solid #04252F;
+
+  &__inner {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1220px;
+    padding: 15px 30px;
+
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    max-height: 45px;
+    display: inline-block;
+    padding: 5px;
+
+    img {
+      height: 35px;
+      width: auto;
+    }
+  }
+
+  &__login {
+    max-width: 160px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+
+    &-item {
+      display: inline-block;
+      padding: 7px 15px;
+
+      color: $clrt__main;
+      font-size: 18px;
+
+      cursor: pointer;
+
+      @include transition();
+
+      &:hover {
+        color: $clrt__link;
+      }
+
+      &:not(:first-child) {
+        border-left: 1px solid #000;
+      }
+    }
+  }
+}
+
+.footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 60px;
+
+  border-top: 2px solid #04252F;
+
+  &__inner {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1220px;
+    padding: 15px 30px;
+
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    max-height: 30px;
+    display: inline-block;
+    padding: 5px;
+
+    img {
+      height: 25px;
+      width: auto;
+    }
+  }
+
+  &__copyright {
+    display: inline-block;
+    max-width: 160px;
+
+    text-align: right;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .04px;
+    line-height: 15px;
+  }
+}
+
+@media (max-width: $breakpoint_small) {
+  .header {
+    &__inner {
+      padding: 15px;
+    }
+
+    &__logo {
+      max-height: 33px;
+
+      img {
+        height: 100%;
+      }
+    }
+
+    &__login {
+      max-width: 75px;
+    }
+
+    &__nav {
+      &-item {
+        padding: 7px;
+
+        font-size: 14px;
+      }
+    }
+  }
+
+  .footer {
+    &__inner {
+      padding: 15px;
+    }
+
+    &__logo {
+      img {
+        height: 18px;
+      }
+    }
+  }
 }
