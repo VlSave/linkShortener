@@ -43,6 +43,7 @@
     "webpackWatch": "webpack --mode development --colors --progress --watch",
     "webpackBuild": "webpack --mode production --colors --progress",
     "start": "babel-node server/app",
+    "heroku-postbuild": "npm install",
     "lint": "eslint"
   },
   "dependencies": {
