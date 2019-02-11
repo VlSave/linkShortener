@@ -1,4 +1,3 @@
-import path from 'path';
 import bodyParser from 'body-parser';
 import Express from 'express';
 import mongoose from 'mongoose';
@@ -18,7 +17,7 @@ if (!mongodbURI) {
   mongodbURI = 'mongodb://localhost:27017/base';
 }
 
-const DBConnection = mongoose.createConnection('mongodb://localhost:27017/base', { useNewUrlParser: true });
+const DBConnection = mongoose.createConnection(mongodbURI, { useNewUrlParser: true });
 
 const linksScheme = new mongoose.Schema({
   shortUrl: String,
@@ -45,8 +44,7 @@ const Users = DBConnection.model('Users', usersScheme);
 
 const app = Express();
 
-
-app.use('/assets', Express.static(path.join(__dirname, '/assets')));
+app.use('/assets', Express.static(`${__dirname}/assets`));
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -80,6 +78,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  console.log(`${__dirname}/assets`);
 
   res.send(getIndexPage());
 });
