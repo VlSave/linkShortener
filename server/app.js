@@ -44,7 +44,7 @@ const Users = DBConnection.model('Users', usersScheme);
 
 const app = Express();
 
-app.use('/assets', Express.static(`${__dirname}/assets`));
+app.use('/assets', Express.static(`assets`));
 app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.use(bodyParser.urlencoded({ extended: false }));
