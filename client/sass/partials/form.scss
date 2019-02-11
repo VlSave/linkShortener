@@ -166,6 +166,9 @@
     padding: 8px 12px;
     line-height: 1.4;
 
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     font-size: 16px;
     font-weight: 700;
     background-color: #f7f7f7;
@@ -182,7 +185,7 @@
     &-wrapper {
       display: none;
       width: 100%;
-      max-width: 320px;
+      max-width: 340px;
       margin: 20px auto 0 auto;
 
       &_showed {
