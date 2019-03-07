@@ -52,7 +52,7 @@ export default function FormWrapper(action, inputsData, requiredInputs, parentPr
 
       validateInput = (name) => {
         const value = this.state.data[name];
-        const isEmpty = this.isNotEmptyValue(name, value);
+        const isEmpty = this.isNotEmptyValue(name);
         switch (true) {
           case name === 'email' && isEmpty:
             if (!validateEmail(value)) {
@@ -106,7 +106,7 @@ export default function FormWrapper(action, inputsData, requiredInputs, parentPr
 
         if (isValidate) {
           this.setState({isLoading: true });
-          console.log('here We Send Data', data);
+
           const formData = {
             nickname: this.state.data.login,
             password: this.state.data.password
@@ -159,7 +159,6 @@ export default function FormWrapper(action, inputsData, requiredInputs, parentPr
       }
 
       render() {
-        console.log(this.state.isSubmitted && !this.state.isError);
         return this.state.isSubmitted && !this.state.isError ? this.renderRedirect() : this.renderTargetForm();
       }
     };

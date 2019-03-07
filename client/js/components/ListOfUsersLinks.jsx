@@ -39,7 +39,6 @@ class UsersLink extends React.PureComponent {
 export default class ListOfUsersLinks extends React.PureComponent {
   render() {
     const { listItems } = this.props;
-    console.log(listItems);
 
     return (
       <ul className="usersList">

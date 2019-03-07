@@ -70,7 +70,6 @@ class Layout extends React.Component {
     try {
       const { data } = await axios.delete('/user/login');
       location.reload();
-      console.log(data);
     } catch (err)  {
       console.log(err);
     }
